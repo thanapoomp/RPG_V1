@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RPG_project.Data;
 using RPG_project.DTOs.Charactor;
+using RPG_project.DTOs.Fight;
 using RPG_project.DTOs.Weapon;
 using RPG_project.Models;
 
@@ -131,5 +132,171 @@ namespace RPG_project.Services.Charactor
 
             return ResponseResult.Success<GetCharactorDto>(dto);
         }
+
+        public async Task<ServiceResponse<AttackResultDto>> WeaponAtk(WeaponAtkDto input)
+        {
+            try
+            {
+                var attacker = await GetCharactorById(input.AttackerId);
+
+                if (attacker is null)
+                {
+                    var errorMessage = $"Charactor id {input.AttackerId} not found";
+                    _log.LogError(errorMessage);
+                    return ResponseResult.Failure<AttackResultDto>(errorMessage);
+                }
+
+                var opponent = await GetCharactorById(input.OpponentId);
+
+                if (opponent is null)
+                {
+                    var errorMessage = $"Charactor id {input.OpponentId} not found";
+                    _log.LogError(errorMessage);
+                    return ResponseResult.Failure<AttackResultDto>(errorMessage);
+                }
+
+                int damage;
+                damage = (attacker.Weapon.Damage + attacker.Strength) - opponent.Defense;
+
+                if (damage > 0)
+                {
+                    opponent.HitPoint -= damage;
+                }
+
+                _dbContext.Charactors.Update(opponent);
+                await _dbContext.SaveChangesAsync();
+
+                var dto = new AttackResultDto();
+                dto.AttackerId = attacker.Id;
+                dto.AttackerName = attacker.Name;
+                dto.AttakerHP = attacker.HitPoint;
+                dto.OpponentId = opponent.Id;
+                dto.OpponentName = opponent.Name;
+                dto.OpponentHp = opponent.HitPoint;
+                dto.Damage = damage;
+
+                return ResponseResult.Success<AttackResultDto>(dto);
+
+            }
+            catch (System.Exception ex)
+            {
+                _log.LogError(ex.Message);
+                return ResponseResult.Failure<AttackResultDto>(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse<AttackResultDto>> SkillAtk(SkillAtkDto input)
+        {
+            try
+            {
+                var attacker = await GetCharactorById(input.AttackerId);
+
+                if (attacker is null)
+                {
+                    var errorMessage = $"Charactor id {input.AttackerId} not found";
+                    _log.LogError(errorMessage);
+                    return ResponseResult.Failure<AttackResultDto>(errorMessage);
+                }
+
+                var opponent = await GetCharactorById(input.OpponentId);
+
+                if (opponent is null)
+                {
+                    var errorMessage = $"Charactor id {input.OpponentId} not found";
+                    _log.LogError(errorMessage);
+                    return ResponseResult.Failure<AttackResultDto>(errorMessage);
+                }
+
+                var charactorSkill = await _dbContext.CharactorSkills
+                .Where(x => x.CharactorId == input.AttackerId && x.SkillId == input.SkillId)
+                .Include(x => x.Skill)
+                .FirstOrDefaultAsync();
+
+                if (charactorSkill is null)
+                {
+                    var errorMessage = $"CharactorSkill not found";
+                    _log.LogError(errorMessage);
+                    return ResponseResult.Failure<AttackResultDto>(errorMessage);
+                }
+
+                int damage;
+                damage = (charactorSkill.Skill.Damage + attacker.Intelligence) - opponent.Intelligence;
+
+                if (damage > 0)
+                {
+                    opponent.HitPoint -= damage;
+                }
+
+                _dbContext.Charactors.Update(opponent);
+                await _dbContext.SaveChangesAsync();
+
+                var dto = new AttackResultDto();
+                dto.AttackerId = attacker.Id;
+                dto.AttackerName = attacker.Name;
+                dto.AttakerHP = attacker.HitPoint;
+                dto.OpponentId = opponent.Id;
+                dto.OpponentName = opponent.Name;
+                dto.OpponentHp = opponent.HitPoint;
+                dto.Damage = damage;
+
+                return ResponseResult.Success<AttackResultDto>(dto);
+
+            }
+            catch (System.Exception ex)
+            {
+                _log.LogError(ex.Message);
+                return ResponseResult.Failure<AttackResultDto>(ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse<GetCharactorDto>> RemoveCharactorWeapon(int charactorId)
+        {
+            var charactor = await GetCharactorById(charactorId);
+            
+            if (charactor is null)
+            {
+                return ResponseResult.Failure<GetCharactorDto>($"Charactor id {charactorId} not found");
+            }
+
+            var weapon = await _dbContext.Weapons.Where(x => x.CharactorId == charactorId).FirstOrDefaultAsync();
+            if (weapon !is null)
+            {
+                _dbContext.Weapons.Remove(weapon);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            var dto = _mapper.Map<GetCharactorDto>(charactor);
+            return ResponseResult.Success<GetCharactorDto>(dto);
+        }
+
+        public async Task<ServiceResponse<GetCharactorDto>> RemoveCharactorSkill(int charactorId)
+        {
+            var charactor = await GetCharactorById(charactorId);
+
+            if (charactor is null)
+            {
+                return ResponseResult.Failure<GetCharactorDto>($"Charactor id {charactorId} not found");
+            }
+
+            var skills = await _dbContext.CharactorSkills.Where(x => x.CharactorId == charactorId).ToListAsync();
+
+            _dbContext.CharactorSkills.RemoveRange(skills);
+            await _dbContext.SaveChangesAsync();
+
+            var dto = _mapper.Map<GetCharactorDto>(charactor);
+            return ResponseResult.Success<GetCharactorDto>(dto);
+        }
+
+
+        private async Task<RPG_project.Models.Charactor> GetCharactorById(int id)
+        {
+            return await _dbContext.Charactors
+               .Where(x => x.Id == id)
+               .Include(x => x.Weapon)
+               .Include(x => x.CharactorSkills).ThenInclude(x => x.Skill)
+               .FirstOrDefaultAsync();
+        }
+
+
     }
 }

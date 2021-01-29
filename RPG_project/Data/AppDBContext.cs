@@ -20,6 +20,12 @@ namespace RPG_project.Data
         public DbSet<CharactorSkill> CharactorSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
 
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductGroup> ProductGroups { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CharactorSkill>().HasKey(x => new {x.CharactorId,x.SkillId});

@@ -126,6 +126,8 @@ namespace RPG_project
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICharactorService,CharactorService>();
             services.AddScoped<ISkillService,SkillService>();
+            services.AddScoped<IProductGroupService,ProductGroupService>();
+            services.AddScoped<IProductService,ProductService>();
             //------End: Service------
         }
 

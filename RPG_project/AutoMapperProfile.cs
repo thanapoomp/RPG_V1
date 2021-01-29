@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RPG_project.DTOs.Charactor;
+using RPG_project.DTOs.Product;
 using RPG_project.DTOs.Skill;
 using RPG_project.DTOs.Weapon;
 using RPG_project.Models;
@@ -21,6 +22,8 @@ namespace RPG_project
             CreateMap<Skill,AddSkillDto>().ReverseMap();
             CreateMap<CharactorSkill,AddCharactorSkillDto>().ReverseMap();
             CreateMap<CharactorSkill,GetCharactorSkillDto>().ReverseMap();
+            CreateMap<ProductGroup,GetProductGroupDto>().ReverseMap();
+            CreateMap<Product,GetProductDto>().ReverseMap();
         }
     }
 }

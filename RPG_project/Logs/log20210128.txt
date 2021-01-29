@@ -1,0 +1,32 @@
+2021-01-28 13:30:22.441 +07:00 [INF] Starting web host
+2021-01-28 15:12:10.273 +07:00 [INF] Starting web host
+2021-01-28 15:12:10.377 +07:00 [FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: RPG_project.Services.Charactor.ICharactorService Lifetime: Scoped ImplementationType: RPG_project.Services.Charactor.CharactorService': Unable to resolve service for type 'Microsoft.Extensions.Logging.ILogger' while attempting to activate 'RPG_project.Services.Charactor.CharactorService'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: RPG_project.Services.Charactor.ICharactorService Lifetime: Scoped ImplementationType: RPG_project.Services.Charactor.CharactorService': Unable to resolve service for type 'Microsoft.Extensions.Logging.ILogger' while attempting to activate 'RPG_project.Services.Charactor.CharactorService'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Microsoft.Extensions.Logging.ILogger' while attempting to activate 'RPG_project.Services.Charactor.CharactorService'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type serviceType, Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngine.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(IEnumerable`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at RPG_project.Program.Main(String[] args) in D:\Lesson\DotnetCoreAPI\NetCoreAPI_Template_v2-master\RPG_project\Program.cs:line 28
+2021-01-28 15:13:11.574 +07:00 [INF] Starting web host
+2021-01-28 15:17:53.159 +07:00 [INF] Starting web host
+2021-01-28 15:18:03.504 +07:00 [INF] Success : http://localhost:5000/swagger/index.html
+2021-01-28 15:18:14.012 +07:00 [INF] Starting web host
+2021-01-28 15:18:14.025 +07:00 [INF] Success : http://localhost:5000/swagger/index.html
+2021-01-28 15:22:37.641 +07:00 [INF] Starting web host
+2021-01-28 15:44:43.750 +07:00 [INF] appsettings.Development.json
+2021-01-28 16:04:41.977 +07:00 [INF] Started
+2021-01-28 17:09:05.885 +07:00 [INF] Started
+2021-01-28 17:15:45.091 +07:00 [INF] Started
